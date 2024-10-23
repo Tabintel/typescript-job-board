@@ -5,6 +5,7 @@ import { Menu } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Sidebar } from './Sidebar'
 import { JobList } from './JobList'
+import { JobApplicationForm } from './JobApplicationForm'
 import { Job } from '@/types/job'
 
 // Mock data for job listings
@@ -44,6 +45,7 @@ const jobListings: Job[] = [
 export function JobBoard() {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false)
   const [salaryRange, setSalaryRange] = useState([80000, 200000])
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null)
 
   return (
     <div className="min-h-screen bg-[#F0F0F0] font-sans">
@@ -62,7 +64,15 @@ export function JobBoard() {
           salaryRange={salaryRange}
           setSalaryRange={setSalaryRange}
         />
-        <JobList jobs={jobListings} />
+        <div className="flex-1 space-y-8">
+          <JobList jobs={jobListings} onJobSelect={setSelectedJob} />
+          {selectedJob && (
+            <div className="bg-white rounded-lg p-6 shadow-sm">
+              <h2 className="text-xl font-semibold mb-4">Apply for {selectedJob.title}</h2>
+              <JobApplicationForm job={selectedJob} />
+            </div>
+          )}
+        </div>
       </main>
     </div>
   )
